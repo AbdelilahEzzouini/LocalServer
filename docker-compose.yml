@@ -1,32 +1,5 @@
 services:
-  ubuntu:
-    image: localserver-ubuntu
-    build:
-      context: .
-      dockerfile: Dockerfile.ubuntu
-    container_name: ubuntu-local-server
-    command: /usr/sbin/sshd -D
-    environment:
-      - USER=root
-      - PASSWORD=root
-    ports:
-      - "2222:22"
-    networks:
-      - localnet
-    volumes:
-      - ubuntu_data:/data
-    restart: always
 
-  it-tools:
-    image: corentinth/it-tools
-    container_name: it-tools
-    ports:
-      - '8888:80'
-    networks:
-      - localnet
-    stdin_open: true
-    tty: true
-  
   mariadb:
     image: mariadb:latest
     container_name: mariadb
@@ -43,6 +16,7 @@ services:
     volumes:
       - mariadb_data:/var/lib/mysql
     restart: always
+  
   phpmyadmin:
     image: phpmyadmin/phpmyadmin:latest
     container_name: phpmyadmin
@@ -61,6 +35,7 @@ services:
     networks:
       - localnet
     restart: always
+  
   postgres:
     image: postgres:latest
     container_name: postgres
@@ -75,6 +50,7 @@ services:
     networks:
       - localnet
     restart: always
+  
   pgadmin:
     image: dpage/pgadmin4:latest
     container_name: pgadmin
@@ -88,6 +64,7 @@ services:
     networks:
       - localnet
     restart: always
+  
   redis:
     image: redis:latest
     container_name: redis
@@ -108,6 +85,7 @@ services:
     networks:
       - localnet
     restart: always
+  
   minio:
     image: minio/minio
     container_name: minio
@@ -128,20 +106,7 @@ services:
         timeout: 10s
         retries: 5
     restart: always
-  sonarqube:
-    image: sonarqube:latest
-    container_name: sonarqube
-    environment:
-      - SONARQUBE_JDBC_URL=jdbc:postgresql://postgres:5432/${POSTGRES_DB:-demo}
-      - SONARQUBE_JDBC_USERNAME=${DB_USERNAME:-admin}
-      - SONARQUBE_JDBC_PASSWORD=${DB_PASSWORD:-admin}
-    ports:
-      - "9002:9000"
-    depends_on:
-      - postgres
-    networks:
-      - localnet
-    restart: always
+
 volumes:
   mariadb_data:
   minio_data:
